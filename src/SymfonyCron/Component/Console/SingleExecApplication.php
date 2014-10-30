@@ -1,6 +1,6 @@
 <?php
 
-namespace SymfonyCron\Console;
+namespace SymfonyCron\Component\Console;
 
 use \Symfony\Component\Console\Application;
 use \Symfony\Component\Console\Input\InputInterface;
@@ -11,7 +11,7 @@ use \Symfony\Component\Console\Output\OutputInterface;
  * protection.  The actual mechanism used is configurable as a service
  * interface.
  *
- * @package  SymfonyCron\Console
+ * @package  SymfonyCron\Component\Console
  * @author   Chris Verges <cverges@coursehero.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
  * @link     http://github.com/course-hero/symfony-cron-bundle
