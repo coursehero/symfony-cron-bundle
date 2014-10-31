@@ -31,6 +31,10 @@
         </testsuite>
     </testsuites>
 
+    <php>
+        <server name="KERNEL_DIR" value="./tests/app/" />
+    </php>
+
     <filter>
         <whitelist>
             <directory suffix=".php">./src/SymfonyCron</directory>
