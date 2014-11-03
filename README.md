@@ -103,18 +103,19 @@ Contributing
 *symfony-cron* is an open source, community-driven project.  If you'd
 like to contribute, please read the [Contributing Code][5] part of the
 documentation.  If you're submitting a pull request, please follow the
-guidelines in the [Submitting a Patch][6] section and use [Pull Request
-Template][7].
+guidelines in the [Submitting a Patch][5] section and use [Pull Request
+Template][5].
 
 Running Tests
 -------------
 
-All tests are supported using standard phpunit practices.
+All tests are supported using standard [phpunit][6] practices.  A
+[helper script][7] has also been provided to assist with running tests.
 
 [1]: http://symfony.com
 [2]: http://php.net
 [3]: http://getcomposer.org
 [4]: https://packagist.org/
-[5]: http://to-be-determined
-[6]: http://to-be-determined
-[7]: http://to-be-determined
+[5]: CONTRIBUTING.md
+[6]: https://phpunit.de
+[7]: phpunit.sh
