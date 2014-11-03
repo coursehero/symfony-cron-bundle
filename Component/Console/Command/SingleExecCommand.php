@@ -31,7 +31,8 @@ class SingleExecCommand extends ContainerAwareCommand
 
     const AUTO_KEY_HASH_ALGO = 'sha256';
 
-    const DEFAULT_LOCK_SERVICE = 'cron_single_exec_lock';
+    const DEFAULT_LOCK_SERVICE = 'symfony_cron.default_lock_service';
+    const PROCESS_SERVICE = 'symfony_cron.process_service';
 
     /**
      * @inheritDoc
@@ -99,10 +100,15 @@ class SingleExecCommand extends ContainerAwareCommand
             $this->getContainer()->get(
                 $input->getOption(self::OPT_LOCK_SERVICE)
             );
-        if (!(is_object($lockService) && $lockService instanceof LockServiceInterface)) {
+        if (!is_a($lockService, '\SymfonyCronBundle\Component\Lock\LockServiceInterface')) {
+            $type =
+                is_object($lockService)
+                    ? get_class($lockService)
+                    : gettype($lockService)
+                ;
             throw new \UnexpectedValueException(
                 'Lock service is of unexpected type: ' .
-                gettype($lockService)
+                $this->get_formatted_type($lockService)
             );
         }
 
@@ -119,9 +125,24 @@ class SingleExecCommand extends ContainerAwareCommand
         // Run the $actualCommand, spawning a child process or loading
         // up a child command.
         if ($input->getOption(self::OPT_CHILD_PROCESS)) {
-            $process = new Process(implode(' ', $actualCommand));
+            $processService =
+                $this->getContainer()->get(
+                    self::PROCESS_SERVICE
+                );
+            if (!is_a($processService, '\SymfonyCronBundle\Component\Process\ProcessService')) {
+                throw new \UnexpectedValueException(
+                    'Process service is of unexpected type: ' .
+                    $this->get_formatted_type($processService)
+                );
+            }
+
+            $process =
+                $processService->createProcess(
+                    implode(' ', $actualCommand)
+                );
+
             $returnCode =
-                $process->run(function ($type, $buffer) {
+                $process->run(function ($type, $buffer) use (&$output) {
                     if (Process::ERR === $type) {
                         $output->write("<error>$buffer</error>");
                     } else {
@@ -150,5 +171,21 @@ class SingleExecCommand extends ContainerAwareCommand
 
         // Finally, return the result code from the $actualCommand.
         return $returnCode;
+    }
+
+    /**
+     * Returns a well-formatted name, regardless of whether the thing is
+     * an object or base type.
+     *
+     * @param mixed $thing
+     * @return string the best name of the $thing possible
+     */
+    private function get_formatted_type($thing)
+    {
+        return
+            is_object($thing)
+                ? get_class($thing)
+                : gettype($thing)
+            ;
     }
 }

@@ -38,6 +38,7 @@ app/config/config.yml:
     services:
         symfony_cron.lock_file_service:
             class: SymfonyCron\Component\Lock\LockFileService
+        symfony_cron.default_lock_service: "@symfony_cron.lock_file_service"
         symfony_cron.process_service:
             class: SymfonyCron\Component\Process\ProcessService
 

@@ -4,6 +4,7 @@ namespace SymfonyCronBundle\Tests\Component\Console\Command;
 
 use \SymfonyCronBundle\Component\Console\Command\SingleExecCommand;
 use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
+use \SymfonyCronBundle\Component\Process\ProcessService;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use \Symfony\Bundle\FrameworkBundle\Console\Application;
 use \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -23,6 +24,7 @@ class SingleExecCommandTest extends KernelTestCase
     private $application;
     private $testCommand;
     private $alwaysLockService;
+    private $testProcessService;
 
     private $argv;
 
@@ -33,6 +35,7 @@ class SingleExecCommandTest extends KernelTestCase
         $this->testCommand = new TestCommand();
 
         $this->alwaysLockService = new AlwaysLockService();
+        $this->testProcessService = new TestProcessService();
 
         $this->application = new Application(static::$kernel);
         $this->application->setCatchExceptions(false);
@@ -100,18 +103,17 @@ class SingleExecCommandTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderForTestExecute
+     * @dataProvider dataProviderForTestExecute_LockServiceTests
      */
-    public function testExecute($expectedException, $lockService, $message)
+    public function testExecute_LockServiceTests($expectedException, $lockService, $message)
     {
         $this->setExpectedException($expectedException);
 
         $this->argv[] = 'test:command';
 
         $input = new ArgvInput($this->argv);
-        $output = new ConsoleOutput();
+        $output = new BufferedOutput();
 
-        // Ensure the service is unset
         static::$kernel->getContainer()->set(
             SingleExecCommand::DEFAULT_LOCK_SERVICE,
             $lockService
@@ -121,7 +123,7 @@ class SingleExecCommandTest extends KernelTestCase
         $this->fail($message);
     }
 
-    public function dataProviderForTestExecute()
+    public function dataProviderForTestExecute_LockServiceTests()
     {
         return [
             [
@@ -161,9 +163,8 @@ class SingleExecCommandTest extends KernelTestCase
         $this->argv[] = '456';
 
         $input = new ArgvInput($this->argv);
-        $output = new ConsoleOutput();
+        $output = new BufferedOutput();
 
-        // Ensure the service is unset
         static::$kernel->getContainer()->set(
             SingleExecCommand::DEFAULT_LOCK_SERVICE,
             $this->alwaysLockService
@@ -182,6 +183,109 @@ class SingleExecCommandTest extends KernelTestCase
         $this->assertEquals('123', $this->testCommand->option);
         $this->assertEquals(1, count($this->testCommand->argument));
         $this->assertEquals('456', $this->testCommand->argument[0]);
+    }
+
+    public function testExecute_RunAsChildApplication()
+    {
+        $this->argv[] = '--' . SingleExecCommand::OPT_CHILD_PROCESS;
+        $this->argv[] = '--';
+        $this->argv[] = 'php';
+        $this->argv[] = 'app/console';
+        $this->argv[] = 'test:command';
+        $this->argv[] = '--option';
+        $this->argv[] = '123';
+        $this->argv[] = '456';
+
+        $input = new ArgvInput($this->argv);
+        $output = new BufferedOutput();
+
+        static::$kernel->getContainer()->set(
+            SingleExecCommand::PROCESS_SERVICE,
+            $this->testProcessService
+        );
+
+        static::$kernel->getContainer()->set(
+            SingleExecCommand::DEFAULT_LOCK_SERVICE,
+            $this->alwaysLockService
+        );
+
+        $this->assertEquals(0, $this->alwaysLockService->numLocks);
+        $this->assertEquals(0, $this->alwaysLockService->numUnlocks);
+        $this->assertNull($this->testProcessService->testProcess);
+
+        $returnCode = $this->application->run($input, $output);
+
+        $this->assertNotNull($this->testProcessService->testProcess);
+        $this->assertEquals(
+            'php app/console test:command --option 123 456',
+            $this->testProcessService->testProcess->getCommandLine()
+        );
+        $this->assertEquals(
+            'some problemsome feedback', // assuming <error> and <info> OK
+            $output->fetch()
+        );
+        $this->assertEquals(321, $returnCode);
+        $this->assertEquals(1, $this->alwaysLockService->numLocks);
+        $this->assertEquals(1, $this->alwaysLockService->numUnlocks);
+    }
+
+    /**
+     * @dataProvider dataProviderForTestExecute_ProcessServiceTests
+     */
+    public function testExecute_ProcessServiceTests($expectedException, $processService, $message)
+    {
+        $this->setExpectedException($expectedException);
+
+        $this->argv[] = '--' . SingleExecCommand::OPT_CHILD_PROCESS;
+        $this->argv[] = '--';
+        $this->argv[] = 'php';
+        $this->argv[] = 'app/console';
+        $this->argv[] = 'test:command';
+        $this->argv[] = '--option';
+        $this->argv[] = '123';
+        $this->argv[] = '456';
+
+        $input = new ArgvInput($this->argv);
+        $output = new BufferedOutput();
+
+        static::$kernel->getContainer()->set(
+            SingleExecCommand::PROCESS_SERVICE,
+            $processService
+        );
+
+        static::$kernel->getContainer()->set(
+            SingleExecCommand::DEFAULT_LOCK_SERVICE,
+            $this->alwaysLockService
+        );
+
+        $returnCode = $this->application->run($input, $output);
+        $this->fail($message);
+    }
+
+    public function dataProviderForTestExecute_ProcessServiceTests()
+    {
+        return [
+            [
+                '\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException',
+                null,
+                'Process service must exist to run a child process',
+            ],
+            [
+                '\UnexpectedValueException',
+                0,
+                'Process service must be a type of ProcessService',
+            ],
+            [
+                '\UnexpectedValueException',
+                'You may test that assumption at your convenience.',
+                'Process service must be a type of ProcessService',
+            ],
+            [
+                '\UnexpectedValueException',
+                new \ReflectionClass('\Exception'),
+                'Process service must be a type of ProcessService',
+            ],
+        ];
     }
 }
 
@@ -260,5 +364,39 @@ class TestCommand extends ContainerAwareCommand
         }
 
         return $this->returnCode;
+    }
+}
+
+class TestProcessService extends ProcessService
+{
+    public $testProcess;
+
+    public function createProcess($commandLine, $cwd = null, array $env = null, $input = null, $timeout = 60, array $options = array())
+    {
+        if (!isset($this->testProcess)) {
+            $this->testProcess =
+                new TestProcess(
+                    $commandLine,
+                    $cwd,
+                    $env,
+                    $input,
+                    $timeout,
+                    $options
+                );
+        }
+        return $this->testProcess;
+    }
+}
+
+class TestProcess extends Process
+{
+    public $callback;
+
+    public function run($callback = null)
+    {
+        $this->callback = $callback;
+        call_user_func($callback, Process::ERR, 'some problem');
+        call_user_func($callback, Process::OUT, 'some feedback');
+        return 321;
     }
 }
