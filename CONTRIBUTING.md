@@ -173,7 +173,9 @@ keep in mind the following:
 A good commit message is composed of a summary (the first line),
 optionally followed by a blank line and a more detailed description.
 Use a verb (`fixed`, `added`, ...) to start the summary and don't add a
-period at the end.  Here is an example:
+period at the end.  The summary line should be less than 50 characters ideally,
+72 characters at maximum.  Each line should be wrapped at 72 characters.  Here
+is an example:
 
 ```
 Added CONTRIBUTING.md
