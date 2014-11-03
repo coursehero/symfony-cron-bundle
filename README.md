@@ -34,28 +34,68 @@ you want to use the system.  The following checklist might help:
 ### Example: File Lock with Child Process ###
 
 app/config/config.yml:
-
-    services:
-        symfony_cron.lock_file_service:
-            class: SymfonyCron\Component\Lock\LockFileService
-        symfony_cron.default_lock_service: "@symfony_cron.lock_file_service"
-        symfony_cron.process_service:
-            class: SymfonyCron\Component\Process\ProcessService
+```yml
+services:
+    symfony_cron.lock_file_service:
+        class: SymfonyCron\Component\Lock\LockFileService
+    symfony_cron.default_lock_service: "@symfony_cron.lock_file_service"
+    symfony_cron.process_service:
+        class: SymfonyCron\Component\Process\ProcessService
+```
 
 crontab:
-
-    * * * * * /path/to/script
+```
+* * * * * /path/to/script
+```
 
 /path/to/script:
+```bash
+#!/bin/bash
 
-    #!/bin/bash
+/usr/bin/php \
+    /path/to/symfony/app/console \
+    cron:single_exec \
+        --id /path/to/lock/files/some-unique-file \
+        --child_process \
+    -- \
+        /path/to/child/script \
+        --script-option \
+        script-args
+```
 
-    /usr/bin/php \
-        /path/to/symfony/app/console \
-        cron:single_exec \
-            --id /path/to/lock/files/some-unique-file \
-            --child_process \
-            /path/to/child/script
+### Example: Multiple Instances of Same Script as Embedded Application ###
+
+app/config/config.yml:
+```yml
+services:
+    symfony_cron.lock_file_service:
+        class: SymfonyCron\Component\Lock\LockFileService
+    symfony_cron.default_lock_service: "@symfony_cron.lock_file_service"
+    symfony_cron.process_service:
+        class: SymfonyCron\Component\Process\ProcessService
+```
+
+crontab:
+```
+* * * * * /path/to/script instance-1-unique-key parameter-set-1
+* * * * * /path/to/script instance-2-unique-key parameter-set-2
+```
+
+/path/to/script:
+```bash
+#!/bin/bash
+
+KEY="$1"
+PARAM="$2"
+
+/usr/bin/php \
+    /path/to/symfony/app/console \
+    cron:single_exec \
+        --id ${KEY} \
+    -- \
+        some:command \
+        ${PARAM}
+```
 
 Contributing
 ------------
