@@ -98,10 +98,10 @@ class SingleExecCommand extends ContainerAwareCommand
             $this->getContainer()->get(
                 $input->getOption(self::OPT_LOCK_SERVICE)
             );
-        if (!($lockService instanceof LockService)) {
+        if (!(is_object($lockService) && $lockService instanceof LockService)) {
             throw new \UnexpectedValueException(
                 'Lock service is of unexpected type: ' .
-                get_class($lockService)
+                gettype($lockService)
             );
         }
 
