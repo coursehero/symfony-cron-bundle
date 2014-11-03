@@ -3,6 +3,7 @@
 namespace SymfonyCronBundle\Tests\Component\Console\Command;
 
 use \SymfonyCronBundle\Component\Console\Command\SingleExecCommand;
+use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use \Symfony\Bundle\FrameworkBundle\Console\Application;
 use \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -93,9 +94,9 @@ class SingleExecCommandTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderForExecute_BadLockService
+     * @dataProvider dataProviderForTestExecute
      */
-    public function testExecute_BadLockService($expectedException, $lockService, $message)
+    public function testExecute($expectedException, $lockService, $message)
     {
         $this->setExpectedException($expectedException);
 
@@ -114,7 +115,7 @@ class SingleExecCommandTest extends KernelTestCase
         $this->fail($message);
     }
 
-    public function dataProviderForExecute_BadLockService()
+    public function dataProviderForTestExecute()
     {
         return [
             [
@@ -135,9 +136,27 @@ class SingleExecCommandTest extends KernelTestCase
             [
                 '\UnexpectedValueException',
                 new \ReflectionClass('\Exception'),
-                'Objects not of the LockService type should not be allowed',
+                'Objects not of the LockServiceInterface type should not be allowed',
+            ],
+            [
+                '\OverflowException',
+                new NeverLockService(),
+                'An exception should be thrown if the lock cannot be obtained',
             ],
         ];
+    }
+}
+
+class NeverLockService implements LockServiceInterface
+{
+    public function lock($key)
+    {
+        return false;
+    }
+
+    public function unlock($resource)
+    {
+        return false;
     }
 }
 

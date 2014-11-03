@@ -2,7 +2,7 @@
 
 namespace SymfonyCronBundle\Component\Console\Command;
 
-use \SymfonyCronBundle\Component\DependencyInjection\LockService;
+use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use \Symfony\Component\Console\Input\InputArgument;
 use \Symfony\Component\Console\Input\InputInterface;
@@ -98,7 +98,7 @@ class SingleExecCommand extends ContainerAwareCommand
             $this->getContainer()->get(
                 $input->getOption(self::OPT_LOCK_SERVICE)
             );
-        if (!(is_object($lockService) && $lockService instanceof LockService)) {
+        if (!(is_object($lockService) && $lockService instanceof LockServiceInterface)) {
             throw new \UnexpectedValueException(
                 'Lock service is of unexpected type: ' .
                 gettype($lockService)
@@ -108,9 +108,10 @@ class SingleExecCommand extends ContainerAwareCommand
         // Attempt to lock the key.  If we cannot get the key, the
         // assumption is that another instance of the same process is
         // already running.
-        if ($lockService->lock($key) != true) {
+        $handle = $lockService->lock($id);
+        if ($handle === false) {
             throw new \OverflowException(
-                "Unable to obtain lock on '$key'"
+                "Unable to obtain lock on '$id'"
             );
         }
 
@@ -138,7 +139,7 @@ class SingleExecCommand extends ContainerAwareCommand
         }
 
         // Unlock the key for the next instance.
-        $lockService->unlock($key);
+        $lockService->unlock($handle);
 
         // Finally, return the result code from the $actualCommand.
         return $returnCode;
