@@ -1,8 +1,8 @@
 <?php
 
-namespace SymfonyCron\Component\Console\Command;
+namespace SymfonyCronBundle\Component\Console\Command;
 
-use \SymfonyCron\Component\DependencyInjection\LockService;
+use \SymfonyCronBundle\Component\DependencyInjection\LockService;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use \Symfony\Component\Console\Input\InputArgument;
 use \Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ use \Symfony\Component\Process\Process;
  * single-instance execution by using a unique key and external lock
  * service to allow for mutual exclusion locking.
  *
- * @package  SymfonyCron\Component\Console
+ * @package  SymfonyCronBundle\Component\Console
  * @author   Chris Verges <cverges@coursehero.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
  * @link     http://github.com/course-hero/symfony-cron-bundle

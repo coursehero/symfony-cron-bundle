@@ -2,6 +2,7 @@
     "name": "course-hero/symfony-cron-bundle",
     "description": "Cron-related utilities for Symfony2",
     "keywords": ["cron", "symfony"],
+    "homepage": "http://github.com/course-hero/symfony-cron-bundle",
     "type": "symfony-bundle",
     "license": "Apache-2",
     "authors": [
@@ -20,9 +21,8 @@
         "phpunit/phpunit": "~4.3"
     },
     "autoload": {
-        "psr-0": {
-            "SymfonyCron": "src/",
-            "SymfonyCron\\Tests": "tests/"
+        "psr-4": {
+            "SymfonyCronBundle\\": ""
         }
     },
     "repositories": [

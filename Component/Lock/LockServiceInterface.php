@@ -1,13 +1,13 @@
 <?php
 
-namespace SymfonyCron\Component\Lock;
+namespace SymfonyCronBundle\Component\Lock;
 
 /**
  * LockServiceInterface defines a mechanism for establishing a mutual
  * exclusion lock on some common resource.  Implementations use
  * different mechanisms for accomplishing this goal.
  *
- * @package  SymfonyCron\Component\Lock
+ * @package  SymfonyCronBundle\Component\Lock
  * @author   Chris Verges <cverges@coursehero.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
  */

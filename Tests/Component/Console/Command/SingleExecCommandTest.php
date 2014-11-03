@@ -1,9 +1,8 @@
 <?php
 
-namespace SymfonyCron\Component\Console\Command;
+namespace SymfonyCronBundle\Tests\Component\Console\Command;
 
-use \ReflectionObject;
-use \SymfonyCron\Component\Console\Command\SingleExecCommand;
+use \SymfonyCronBundle\Component\Console\Command\SingleExecCommand;
 use \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use \Symfony\Component\Console\Application;
 use \Symfony\Component\Console\Input\InputDefinition;
@@ -20,20 +19,20 @@ class SingleExecCommandTest extends KernelTestCase
 
         $this->application = new Application(static::$kernel);
         $this->application->setAutoExit(false);
+        $this->application->add(new SingleExecCommand());
 
         $this->argv = array(SingleExecCommand::CMD_NAME);
     }
 
     public function testConfigure()
     {
-        $inputDefinition = new InputDefinition();
-        $command = new SingleExecCommand();
-        $command->setDefinition($inputDefinition);
+        $this->assertEquals(
+            'cron:single-exec',
+            SingleExecCommand::CMD_NAME
+        );
 
-        $reflection = new ReflectionObject($command);
-        $method = $reflection->getMethod('configure');
-        $method->setAccessible(TRUE);
-        $method->invoke($command);
+        $command = $this->application->find(SingleExecCommand::CMD_NAME);
+        $inputDefinition = $command->getDefinition();
 
         $this->assertEquals(
             1,

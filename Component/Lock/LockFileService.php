@@ -1,6 +1,6 @@
 <?php
 
-namespace SymfonyCron\Component\Lock;
+namespace SymfonyCronBundle\Component\Lock;
 
 /**
  * The LockFileService uses filesystem-based locking, where the key is
@@ -19,7 +19,7 @@ namespace SymfonyCron\Component\Lock;
  * possible if the underlying filesystem supports this.  Again, please
  * test on your intended target before using in production.
  *
- * @package  SymfonyCron\Component\Lock
+ * @package  SymfonyCronBundle\Component\Lock
  * @author   Chris Verges <cverges@coursehero.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache2
  */

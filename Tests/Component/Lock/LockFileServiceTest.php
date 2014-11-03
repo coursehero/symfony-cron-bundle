@@ -1,9 +1,9 @@
 <?php
 
-namespace SymfonyCron\Component\Lock\Test;
+namespace SymfonyCronBundle\Tests\Component\Lock;
 
-use \SymfonyCron\Component\Lock\LockFileService;
-use \SymfonyCron\Component\Lock\LockServiceInterface;
+use \SymfonyCronBundle\Component\Lock\LockFileService;
+use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
 use \PHPUnit_Framework_TestCase;
 use \org\bovigo\vfs\vfsStream;
 
