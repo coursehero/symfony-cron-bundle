@@ -21,6 +21,8 @@ use \Symfony\Component\Process\Process;
 class SingleExecCommandTest extends KernelTestCase
 {
     private $application;
+    private $testCommand;
+    private $alwaysLockService;
 
     private $argv;
 
@@ -28,11 +30,15 @@ class SingleExecCommandTest extends KernelTestCase
     {
         self::bootKernel();
 
+        $this->testCommand = new TestCommand();
+
+        $this->alwaysLockService = new AlwaysLockService();
+
         $this->application = new Application(static::$kernel);
         $this->application->setCatchExceptions(false);
         $this->application->setAutoExit(false);
         $this->application->add(new SingleExecCommand());
-        $this->application->add(new TestCommand());
+        $this->application->add($this->testCommand);
 
         $this->argv =
             array(
@@ -145,17 +151,72 @@ class SingleExecCommandTest extends KernelTestCase
             ],
         ];
     }
+
+    public function testExecute_RunAsEmbeddedApplication()
+    {
+        $this->argv[] = '--';
+        $this->argv[] = 'test:command';
+        $this->argv[] = '--option';
+        $this->argv[] = '123';
+        $this->argv[] = '456';
+
+        $input = new ArgvInput($this->argv);
+        $output = new ConsoleOutput();
+
+        // Ensure the service is unset
+        static::$kernel->getContainer()->set(
+            SingleExecCommand::DEFAULT_LOCK_SERVICE,
+            $this->alwaysLockService
+        );
+
+        $this->testCommand->returnCode = 123;
+
+        $this->assertEquals(0, $this->alwaysLockService->numLocks);
+        $this->assertEquals(0, $this->alwaysLockService->numUnlocks);
+
+        $returnCode = $this->application->run($input, $output);
+
+        $this->assertEquals(123, $returnCode);
+        $this->assertEquals(1, $this->alwaysLockService->numLocks);
+        $this->assertEquals(1, $this->alwaysLockService->numUnlocks);
+        $this->assertEquals('123', $this->testCommand->option);
+        $this->assertEquals(1, count($this->testCommand->argument));
+        $this->assertEquals('456', $this->testCommand->argument[0]);
+    }
+}
+
+class AlwaysLockService implements LockServiceInterface
+{
+    public $numLocks = 0;
+    public $numUnlocks = 0;
+
+    public function lock($key)
+    {
+        $this->numLocks++;
+        return true;
+    }
+
+    public function unlock($resource)
+    {
+        $this->numUnlocks++;
+        return true;
+    }
 }
 
 class NeverLockService implements LockServiceInterface
 {
+    public $numLocks = 0;
+    public $numUnlocks = 0;
+
     public function lock($key)
     {
+        $this->numLocks++;
         return false;
     }
 
     public function unlock($resource)
     {
+        $this->numUnlocks++;
         return false;
     }
 }

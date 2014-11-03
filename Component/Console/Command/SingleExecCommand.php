@@ -4,6 +4,7 @@ namespace SymfonyCronBundle\Component\Console\Command;
 
 use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use \Symfony\Component\Console\Input\ArgvInput;
 use \Symfony\Component\Console\Input\InputArgument;
 use \Symfony\Component\Console\Input\InputInterface;
 use \Symfony\Component\Console\Input\InputOption;
@@ -117,7 +118,7 @@ class SingleExecCommand extends ContainerAwareCommand
 
         // Run the $actualCommand, spawning a child process or loading
         // up a child command.
-        if ($input->hasOption(self::OPT_CHILD_PROCESS)) {
+        if ($input->getOption(self::OPT_CHILD_PROCESS)) {
             $process = new Process(implode(' ', $actualCommand));
             $returnCode =
                 $process->run(function ($type, $buffer) {
@@ -128,8 +129,14 @@ class SingleExecCommand extends ContainerAwareCommand
                     }
                 });
         } else {
-            $childArguments = $actualCommand;
-            $childCommandName = array_shift($childArguments);
+            $childCommandName = $actualCommand[0];
+            $childArguments =
+                array(
+                    'app/console', // just something as argv[0]
+                );
+            foreach ($actualCommand as $command) {
+                $childArguments[] = $command;
+            }
             $childCommand = $this->getApplication()->find($childCommandName);
             $returnCode =
                 $childCommand->run(
