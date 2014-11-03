@@ -29,10 +29,10 @@ class ProcessService
      *
      * @see https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Process/Process.php
      */
-    public function createProcess($commandline, $cwd = null, array $env = null, $input = null, $timeout = 60, array $options = array())
+    public function createProcess($commandLine, $cwd = null, array $env = null, $input = null, $timeout = 60, array $options = array())
     {
         return new Process(
-            $command,
+            $commandLine,
             $cwd,
             $env,
             $input,
