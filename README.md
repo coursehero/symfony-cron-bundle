@@ -37,10 +37,10 @@ app/config/config.yml:
 ```yml
 services:
     symfony_cron.lock_file_service:
-        class: SymfonyCron\Component\Lock\LockFileService
+        class: SymfonyCronBundle\Component\Lock\LockFileService
     symfony_cron.default_lock_service: "@symfony_cron.lock_file_service"
     symfony_cron.process_service:
-        class: SymfonyCron\Component\Process\ProcessService
+        class: SymfonyCronBundle\Component\Process\ProcessService
 ```
 
 crontab:
@@ -69,10 +69,10 @@ app/config/config.yml:
 ```yml
 services:
     symfony_cron.lock_file_service:
-        class: SymfonyCron\Component\Lock\LockFileService
+        class: SymfonyCronBundle\Component\Lock\LockFileService
     symfony_cron.default_lock_service: "@symfony_cron.lock_file_service"
     symfony_cron.process_service:
-        class: SymfonyCron\Component\Process\ProcessService
+        class: SymfonyCronBundle\Component\Process\ProcessService
 ```
 
 crontab:
