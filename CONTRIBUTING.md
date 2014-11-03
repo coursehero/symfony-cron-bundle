@@ -370,13 +370,13 @@ will ask you to edit the commit message, which by default is a listing
 of the commit messages of all the commits.  When you are finished,
 execute the push command.
 
-[1] https://github.com/course-hero/symfony-cron-bundle/issues
-[2] http://git-scm.com/book
-[3] https://github.com
-[4] https://github.com/course-hero/symfony-cron-bundle
-[5] https://getcomposer.org/download/
-[6] http://www.apache.org/licenses/LICENSE-2.0.txt
-[7] http://symfony.com/doc/current/contributing/code/conventions.html
-[8] http://symfony.com/doc/current/contributing/code/standards.html
-[9] CHANGELOG.md
-[10] UPGRADE.md
+[1]: https://github.com/course-hero/symfony-cron-bundle/issues
+[2]: http://git-scm.com/book
+[3]: https://github.com
+[4]: https://github.com/course-hero/symfony-cron-bundle
+[5]: https://getcomposer.org/download/
+[6]: http://www.apache.org/licenses/LICENSE-2.0.txt
+[7]: http://symfony.com/doc/current/contributing/code/conventions.html
+[8]: http://symfony.com/doc/current/contributing/code/standards.html
+[9]: CHANGELOG.md
+[10]: UPGRADE.md
