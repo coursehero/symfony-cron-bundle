@@ -101,10 +101,9 @@ Contributing
 ------------
 
 *symfony-cron* is an open source, community-driven project.  If you'd
-like to contribute, please read the [Contributing Code][5] part of the
-documentation.  If you're submitting a pull request, please follow the
-guidelines in the [Submitting a Patch][5] section and use [Pull Request
-Template][5].
+like to contribute, please read the [Contributing][5] documentation.  If you're
+submitting a pull request, please follow the guidelines in the [Submitting a
+Patch][5] section and use [Pull Request Template][5].
 
 Running Tests
 -------------
