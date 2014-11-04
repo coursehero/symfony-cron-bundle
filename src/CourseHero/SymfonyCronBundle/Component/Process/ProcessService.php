@@ -1,6 +1,6 @@
 <?php
 
-namespace SymfonyCronBundle\Component\Process;
+namespace CourseHero\SymfonyCronBundle\Component\Process;
 
 use \Symfony\Component\Process\Process;
 

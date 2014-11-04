@@ -1,8 +1,8 @@
 <?php
 
-namespace SymfonyCronBundle\Tests\Component\Process;
+namespace CourseHero\SymfonyCronBundle\Tests\Component\Process;
 
-use \SymfonyCronBundle\Component\Process\ProcessService;
+use \CourseHero\SymfonyCronBundle\Component\Process\ProcessService;
 use \PHPUnit_Framework_TestCase;
 
 class SingleExecCommandTest extends PHPUnit_Framework_TestCase

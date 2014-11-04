@@ -1,6 +1,6 @@
 <?php
 
-namespace SymfonyCronBundle\DependencyInjection;
+namespace CourseHero\SymfonyCronBundle\DependencyInjection;
 
 use \Symfony\Component\DependencyInjection\ContainerBuilder;
 use \Symfony\Component\Config\FileLocator;

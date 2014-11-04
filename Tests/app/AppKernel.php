@@ -18,7 +18,7 @@ class AppKernel extends Kernel
     {
         $bundles = array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new SymfonyCronBundle\SymfonyCronBundle(), // MODIFIED FROM ORIGINAL
+            new CourseHero\SymfonyCronBundle\CourseHeroSymfonyCronBundle(), // MODIFIED FROM ORIGINAL
         );
 
         // This small hack allows to register custom

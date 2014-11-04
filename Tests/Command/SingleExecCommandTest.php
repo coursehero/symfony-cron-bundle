@@ -1,10 +1,10 @@
 <?php
 
-namespace SymfonyCronBundle\Tests\Command;
+namespace CourseHero\SymfonyCronBundle\Tests\Command;
 
-use \SymfonyCronBundle\Command\SingleExecCommand;
-use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
-use \SymfonyCronBundle\Component\Process\ProcessService;
+use \CourseHero\SymfonyCronBundle\Command\SingleExecCommand;
+use \CourseHero\SymfonyCronBundle\Component\Lock\LockServiceInterface;
+use \CourseHero\SymfonyCronBundle\Component\Process\ProcessService;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use \Symfony\Bundle\FrameworkBundle\Console\Application;
 use \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace SymfonyCronBundle\Component\Lock;
+namespace CourseHero\SymfonyCronBundle\Component\Lock;
 
 /**
  * The LockFileService uses filesystem-based locking, where the key is

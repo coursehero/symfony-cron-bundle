@@ -1,8 +1,8 @@
 <?php
 
-namespace SymfonyCronBundle\Command;
+namespace CourseHero\SymfonyCronBundle\Command;
 
-use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
+use \CourseHero\SymfonyCronBundle\Component\Lock\LockServiceInterface;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use \Symfony\Component\Console\Input\ArgvInput;
 use \Symfony\Component\Console\Input\InputArgument;
@@ -100,7 +100,7 @@ class SingleExecCommand extends ContainerAwareCommand
             $this->getContainer()->get(
                 $input->getOption(self::OPT_LOCK_SERVICE)
             );
-        if (!is_a($lockService, '\SymfonyCronBundle\Component\Lock\LockServiceInterface')) {
+        if (!is_a($lockService, '\CourseHero\SymfonyCronBundle\Component\Lock\LockServiceInterface')) {
             $type =
                 is_object($lockService)
                     ? get_class($lockService)
@@ -129,7 +129,7 @@ class SingleExecCommand extends ContainerAwareCommand
                 $this->getContainer()->get(
                     self::PROCESS_SERVICE
                 );
-            if (!is_a($processService, '\SymfonyCronBundle\Component\Process\ProcessService')) {
+            if (!is_a($processService, '\CourseHero\SymfonyCronBundle\Component\Process\ProcessService')) {
                 throw new \UnexpectedValueException(
                     'Process service is of unexpected type: ' .
                     $this->get_formatted_type($processService)

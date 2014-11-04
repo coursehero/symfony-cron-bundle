@@ -1,6 +1,6 @@
 <?php
 
-namespace SymfonyCronBundle\Component\Lock;
+namespace CourseHero\SymfonyCronBundle\Component\Lock;
 
 /**
  * LockServiceInterface defines a mechanism for establishing a mutual

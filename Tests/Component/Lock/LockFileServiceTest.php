@@ -1,9 +1,9 @@
 <?php
 
-namespace SymfonyCronBundle\Tests\Component\Lock;
+namespace CourseHero\SymfonyCronBundle\Tests\Component\Lock;
 
-use \SymfonyCronBundle\Component\Lock\LockFileService;
-use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
+use \CourseHero\SymfonyCronBundle\Component\Lock\LockFileService;
+use \CourseHero\SymfonyCronBundle\Component\Lock\LockServiceInterface;
 use \PHPUnit_Framework_TestCase;
 use \org\bovigo\vfs\vfsStream;
 

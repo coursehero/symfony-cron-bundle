@@ -21,8 +21,8 @@
         "phpunit/phpunit": "~4.3"
     },
     "autoload": {
-        "psr-4": {
-            "SymfonyCronBundle\\": ""
+        "psr-0": {
+            "CourseHero\\SymfonyCronBundle\\": "src/"
         }
     },
     "repositories": [
