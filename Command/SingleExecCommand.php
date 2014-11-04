@@ -1,6 +1,6 @@
 <?php
 
-namespace SymfonyCronBundle\Component\Console\Command;
+namespace SymfonyCronBundle\Command;
 
 use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;

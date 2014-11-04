@@ -1,8 +1,8 @@
 <?php
 
-namespace SymfonyCronBundle\Tests\Component\Console\Command;
+namespace SymfonyCronBundle\Tests\Command;
 
-use \SymfonyCronBundle\Component\Console\Command\SingleExecCommand;
+use \SymfonyCronBundle\Command\SingleExecCommand;
 use \SymfonyCronBundle\Component\Lock\LockServiceInterface;
 use \SymfonyCronBundle\Component\Process\ProcessService;
 use \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
