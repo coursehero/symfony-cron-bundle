@@ -1,3 +1,8 @@
+## Release 0.2.0
+ - Fixed autoloading of Command classes in Symfony2
+ - [BC BREAK] Refactored everything to the CourseHero\SymfonyCronBundle
+   namespace
+
 ## Release 0.1.1
  - Fixed namespace reference in README.md
 
