@@ -62,15 +62,15 @@ class LockFileServiceTest extends PHPUnit_Framework_TestCase
 
     public function negativeDataForKeyTests()
     {
-        return [
-            [null],
-            [''],
-            ['file:/'],
-            ['file://'],
-            ['file:///'],
-            ['/this/is/a/valid/path/missing/prefix'],
-            [' file:///this/is/a/valid/path/other/than/the/space'],
-        ];
+        return array(
+            array(null),
+            array(''),
+            array('file:/'),
+            array('file://'),
+            array('file:///'),
+            array('/this/is/a/valid/path/missing/prefix'),
+            array(' file:///this/is/a/valid/path/other/than/the/space'),
+        );
     }
 
     /**
@@ -99,11 +99,11 @@ class LockFileServiceTest extends PHPUnit_Framework_TestCase
 
     public function positiveDataForKeyTests()
     {
-        return [
-            [vfsStream::url('keys/1'), TRUE,  'c' ],
-            [vfsStream::url('keys/2'), FALSE, null],
-            [vfsStream::url('keys/3'), TRUE,  'a' ],
-        ];
+        return array(
+            array(vfsStream::url('keys/1'), TRUE,  'c' ),
+            array(vfsStream::url('keys/2'), FALSE, null),
+            array(vfsStream::url('keys/3'), TRUE,  'a' ),
+        );
     }
 
     /**
@@ -154,13 +154,13 @@ class LockFileServiceTest extends PHPUnit_Framework_TestCase
 
     public function getDataForTestUnlockNotAResourceArg()
     {
-        return [
-            [null],
-            [''],
-            ['1'],
-            ['foobar'],
-            [1],
-        ];
+        return array(
+            array(null),
+            array(''),
+            array('1'),
+            array('foobar'),
+            array(1),
+        );
     }
 
     public function testUnlock_LockedResource()

@@ -7,6 +7,8 @@ What is symfony-cron?
 *symfony-cron* is a bundle of utilities for [Symfony2][1] that provide
 functions related to scheduled tasks run out of a cron context.
 
+[![Build Status](https://travis-ci.org/course-hero/symfony-cron-bundle.svg)](https://travis-ci.org/course-hero/symfony-cron-bundle) [![Coverage Status](https://img.shields.io/coveralls/course-hero/symfony-cron-bundle.svg)](https://coveralls.io/r/course-hero/symfony-cron-bundle)
+
 Requirements
 ------------
 

@@ -125,33 +125,33 @@ class SingleExecCommandTest extends KernelTestCase
 
     public function dataProviderForTestExecute_LockServiceTests()
     {
-        return [
-            [
+        return array(
+            array(
                 '\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException',
                 null,
                 'Non-existant lock_service should not be allowed by Symfony2 kernel',
-            ],
-            [
+            ),
+            array(
                 '\UnexpectedValueException',
                 0,
                 'Non-object lock_service should not be allowed',
-            ],
-            [
+            ),
+            array(
                 '\UnexpectedValueException',
                 'If we\'re going to be damned, let\'s be damned for what we really are.',
                 'Non-object lock_service should not be allowed',
-            ],
-            [
+            ),
+            array(
                 '\UnexpectedValueException',
                 new \ReflectionClass('\Exception'),
                 'Objects not of the LockServiceInterface type should not be allowed',
-            ],
-            [
+            ),
+            array(
                 '\OverflowException',
                 new NeverLockService(),
                 'An exception should be thrown if the lock cannot be obtained',
-            ],
-        ];
+            ),
+        );
     }
 
     public function testExecute_RunAsEmbeddedApplication()
@@ -264,28 +264,28 @@ class SingleExecCommandTest extends KernelTestCase
 
     public function dataProviderForTestExecute_ProcessServiceTests()
     {
-        return [
-            [
+        return array(
+            array(
                 '\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException',
                 null,
                 'Process service must exist to run a child process',
-            ],
-            [
+            ),
+            array(
                 '\UnexpectedValueException',
                 0,
                 'Process service must be a type of ProcessService',
-            ],
-            [
+            ),
+            array(
                 '\UnexpectedValueException',
                 'You may test that assumption at your convenience.',
                 'Process service must be a type of ProcessService',
-            ],
-            [
+            ),
+            array(
                 '\UnexpectedValueException',
                 new \ReflectionClass('\Exception'),
                 'Process service must be a type of ProcessService',
-            ],
-        ];
+            ),
+        );
     }
 }
 
